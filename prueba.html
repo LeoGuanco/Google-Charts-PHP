@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Cebada</title>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript">
+  google.load('visualization', '1.1', {packages: ['line']});
+	google.setOnLoadCallback(drawChart);
+
+  var datos = $.ajax({
+        url:'datosGrafico.php',
+        type:'post',
+        dataType:'json',
+        async:false
+      }).responseText;
+        
+  datos = JSON.parse(datos);
+	
+  function drawChart() {
+	  
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Fecha');
+    data.addColumn('number', 'Sensor 1');
+    data.addColumn('number',  'Sensor 2');
+
+    data.addRows(datos);
+
+    var options = {
+      chart: {
+        title: 'Grafico - Sensores',
+        subtitle: 'Temperatura en funcion del tiempo'
+      },
+      width: 900,
+      height: 500
+    };
+
+    var chart = new google.charts.Line(document.getElementById('linechart_material'));
+
+    chart.draw(data, options);
+  }
+    //Refrescar la pagina cada 10seg
+    //setTimeout("document.location = document.location",10000);
+  </script>
+</head>
+<body>
+  <div id="linechart_material"></div>
+</body>
+</html>
